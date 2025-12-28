@@ -45,6 +45,16 @@ Or worse — training completes, but mAP is garbage because your masks got corru
 
 ---
 
+## Why AugmentLens?
+
+| Feature | Standard Albumentations | With AugmentLens |
+|---------|-------------------------|------------------|
+| Visualization | Manual `plt.imshow` calls | Automatic Side-by-Side |
+| Debugging | Print statements | Visual Pipeline Hook |
+| Production | Requires code changes | Zero-overhead (pass-through) |
+
+---
+
 ## Quick Start
 
 ### Installation
