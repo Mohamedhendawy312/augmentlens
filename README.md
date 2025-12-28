@@ -1,6 +1,5 @@
 # AugmentLens
 
-[![PyPI](https://img.shields.io/badge/PyPI-Coming%20Soon-blue)](https://pypi.org/project/augmentlens/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
 [![Tests](https://img.shields.io/badge/Tests-80%20passed-brightgreen)](tests/)
@@ -59,11 +58,7 @@ Or worse — training completes, but mAP is garbage because your masks got corru
 
 ### Installation
 
-```bash
-pip install augmentlens  # Coming soon to PyPI
-```
-
-For now, install from source:
+Install directly from source:
 
 ```bash
 git clone https://github.com/Mohamedhendawy312/augmentlens.git
@@ -137,11 +132,16 @@ print(f"Mask survival: {survival_ratio:.1%}")  # e.g., "Mask survival: 87.3%"
 
 ---
 
-## Roadmap
+## Future Ideas
+
+Completed features:
 
 - [x] Albumentations adapter
 - [x] Matplotlib renderer
 - [x] Bounding box auto-clamping
+
+Possible extensions (contributions welcome!):
+
 - [ ] Torchvision adapter
 - [ ] HTML report export
 - [ ] Jupyter widget integration
