@@ -56,7 +56,7 @@ pip install augmentlens  # Coming soon to PyPI
 For now, install from source:
 
 ```bash
-git clone https://github.com/hendawy312/augmentlens.git
+git clone https://github.com/Mohamedhendawy312/augmentlens.git
 cd augmentlens
 pip install -e ".[dev]"
 ```
