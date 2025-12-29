@@ -221,12 +221,24 @@ class AlbumentationsAdapter(BaseAdapter):
             albumentations_input_dict["mask"] = input_snapshot.raw_segmentation_mask
         
         # Labels passed separately per modern Albumentations API
+        # We need to check if the pipeline expects bboxes (has bbox_params configured)
+        # If so, we must always pass bboxes and the label_fields, even if empty
+        pipeline_expects_bboxes = (
+            hasattr(self._augmentation_pipeline, "processors")
+            and "bboxes" in self._augmentation_pipeline.processors
+        )
+        
         if input_snapshot.raw_bounding_boxes:
             bboxes_coords, bbox_labels = _convert_bboxes_to_albumentations_format(
                 input_snapshot.raw_bounding_boxes,
             )
             albumentations_input_dict["bboxes"] = bboxes_coords
             albumentations_input_dict["bbox_labels"] = bbox_labels
+        elif pipeline_expects_bboxes:
+            # Pipeline expects bboxes but we have none - pass empty lists
+            # This prevents "label_fields not valid" error when bboxes=[]
+            albumentations_input_dict["bboxes"] = []
+            albumentations_input_dict["bbox_labels"] = []
         
         # Execute the pipeline with error handling
         try:
@@ -319,6 +331,12 @@ class AlbumentationsAdapter(BaseAdapter):
         if output_snapshot.augmented_segmentation_mask is not None:
             native_output["mask"] = output_snapshot.augmented_segmentation_mask
         
+        # Check if pipeline expects bboxes (has bbox_params configured)
+        pipeline_expects_bboxes = (
+            hasattr(self._augmentation_pipeline, "processors")
+            and "bboxes" in self._augmentation_pipeline.processors
+        )
+        
         # Include bboxes if present (convert back to list of tuples)
         if output_snapshot.augmented_bounding_boxes:
             native_output["bboxes"] = [
@@ -328,6 +346,11 @@ class AlbumentationsAdapter(BaseAdapter):
             native_output["bbox_labels"] = [
                 box.label for box in output_snapshot.augmented_bounding_boxes
             ]
+        elif pipeline_expects_bboxes:
+            # Pipeline expects bboxes but we have none - return empty lists
+            # This ensures consistent output format when input had empty bboxes
+            native_output["bboxes"] = []
+            native_output["bbox_labels"] = []
         
         return native_output
     

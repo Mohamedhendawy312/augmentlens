@@ -76,15 +76,17 @@ from augmentlens import PipelineHook, MatplotlibRenderer
 aug = PipelineHook(A.Compose([
     A.Rotate(limit=45, p=1.0),
     A.RandomBrightnessContrast(p=1.0),
-], bbox_params=A.BboxParams(format="pascal_voc", label_fields=["labels"])))
+], bbox_params=A.BboxParams(format="pascal_voc", label_fields=["bbox_labels"])))
 
 # Use exactly as before
-result = aug(image=img, bboxes=boxes, labels=labels)
+result = aug(image=img, bboxes=boxes, bbox_labels=labels)
 
 # Visualize the before/after
 renderer = MatplotlibRenderer()
 renderer.render(aug.latest_capture, save_path="debug.png")
 ```
+
+> **💡 Tip:** The string in `label_fields` MUST match the keyword argument name you pass to the pipeline. For example, `label_fields=["bbox_labels"]` requires `aug(..., bbox_labels=[...])`. Mismatched names will cause a "label_fields not valid" error.
 
 ### Production Mode
 

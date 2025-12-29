@@ -155,7 +155,13 @@ class MatplotlibRenderer(BaseRenderer):
             fig.savefig(save_path, dpi=dpi, bbox_inches="tight")
         
         if show:
-            plt.show()
+            # Only show if we're in an interactive backend
+            # This avoids spurious warnings in CI/server environments
+            backend = plt.get_backend().lower()
+            interactive_backends = ("tkagg", "qt", "wx", "gtk", "macosx", "nbagg", "webagg")
+            if any(interactive in backend for interactive in interactive_backends):
+                plt.show()
+            # For non-interactive backends (like 'agg'), silently skip plt.show()
         
         return fig
     
